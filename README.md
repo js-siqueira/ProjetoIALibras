@@ -19,9 +19,14 @@ Abrir a pasta pelo Android Studio ou outro compilador desejado
 
 Executar em um dispotivo android 6.0.1 ou superior
 
+# A fazer
+Juntar o servidor com a IA para fazer a conexao com o App
+
 # Autores
 Higor Frade
+
 José Siqueira
+
 Victor Silva
 
 # Orientador e Professor
