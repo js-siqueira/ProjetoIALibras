@@ -8,10 +8,16 @@ Através de um aplicativo Android, o usuário ira, inicialmente, tirar uma foto 
 
 # Tecnologias Utilizadas
 🐍 Python
-📱 Android
+📱 Android (Java)
+
+# Requisitos
+Python 3
+Jupyter Notebook
+Android Studio
 
 # Como Executar o Projeto
-Abrir arquivo server_flask.py
+Abrir arquivo server_flask.py ou o arquivo Servidor_Flask.ipynb no jupyter notebook
+Clicar no simbolo de play para rodar o servidor.
 
 cd app 
 
