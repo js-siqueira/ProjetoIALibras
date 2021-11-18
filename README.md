@@ -11,6 +11,8 @@ Através de um aplicativo Android, o usuário ira, inicialmente, tirar uma foto 
 📱 Android
 
 # Como Executar o Projeto
+Abrir arquivo server_flask.py
+
 cd app 
 
 cd ProjetoIALibras
