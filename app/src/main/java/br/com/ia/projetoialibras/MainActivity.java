@@ -2,6 +2,7 @@ package br.com.ia.projetoialibras;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.content.Intent;
@@ -22,11 +23,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
-
-    private int REQUEST_IMAGE_CAPTURE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +68,37 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_TAKE_PHOTO = 1;
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+
+            ImageView imagem = (ImageView) findViewById(R.id.imagem);
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imagem.setImageBitmap(imageBitmap);
+        }
+    }
+
+   /*
  private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivity(takePictureIntent);
 
     }
+
+    */
 
 /*
     @Override
@@ -87,6 +114,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-    
+
  */
 }
