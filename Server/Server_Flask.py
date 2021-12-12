@@ -8,13 +8,13 @@ def conexaoAndroid():
     
     json=request.get_json()
     if json is None:
-        print("No valid request body, json missing!")
-        return jsonify({'error': 'No valid request body, json missing!'})
+        print("esta faltando json, não um request valido")
+        return jsonify({'error': 'esta faltando json, não um request valido'})
     else:
         img_data = json['img']
         convert_and_save(img_data)
 
-      # this method convert and save the base64 string to image
+      # metodo para alterar a string base64 em img
      
         
     ia = joblib.load('svm_model_pkl')
