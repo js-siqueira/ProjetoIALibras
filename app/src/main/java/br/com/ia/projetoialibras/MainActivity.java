@@ -60,7 +60,16 @@ public class MainActivity extends AppCompatActivity {
                 getPermissions();
             }
         });
-
+        
+     sendServer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    uploadImage();
+                }
+            }
+        });
+    }
        
 
     private void getPermissions() {
@@ -71,6 +80,21 @@ public class MainActivity extends AppCompatActivity {
         }
         else
             dispatchTakePictureIntent();
+    }
+    
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    dispatchTakePictureIntent();
+                } else {
+                    Toast.makeText(this, "Não vai funcionar!!!", Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
+        }
     }
 
     
@@ -96,6 +120,57 @@ public class MainActivity extends AppCompatActivity {
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             imagem.setImageBitmap(imageBitmap);
         }
+    }
+    
+    //adicionando metodo para dar upload da imagem ao servidor
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void uploadImage(){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, uploadURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+                            ImageView imgview = (ImageView) findViewById(R.id.imagem);
+                            JSONObject jsonObject = new JSONObject(response);
+                            String Response = jsonObject.getString("response");
+                            Toast.makeText(MainActivity.this, Response, Toast.LENGTH_LONG).show();
+                            imgview.setImageResource(0);
+                            imgview.setVisibility(View.GONE);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        })
+        {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("image", imageToString(bitmap));
+
+
+                return params;
+            }
+        };
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            MySingleton.getInstance(MainActivity.this).addToRequestQueue(stringRequest);
+        }
+    }
+    
+//converter imagem para string para BASE64 pra enviar ao servidor
+    private String imageToString (Bitmap bitmap){
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        byte [] imgBytes = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(imgBytes, Base64.DEFAULT);
     }
 
 
