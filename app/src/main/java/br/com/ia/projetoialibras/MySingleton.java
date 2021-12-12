@@ -15,6 +15,33 @@ import java.util.Base64;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class MySingleton {
+  
+   private static MySingleton mInstance;
+   private RequestQueue requestQueue;
+   private static Context mCtx;
+
+   private  MySingleton(Context context){
+       mCtx = context;
+       requestQueue = getRequestQueue();
+   }
+
+   private  RequestQueue getRequestQueue(){
+       if(requestQueue == null){
+           requestQueue = Volley.newRequestQueue(mCtx.getApplicationContext());
+       }
+       return requestQueue;
+   }
+
+   public static  synchronized  MySingleton getInstance(Context context){
+       if (mInstance == null){
+           mInstance = new MySingleton(context);
+       }
+       return mInstance;
+   }
+
+   public<T> void addToRequestQueue(Request<T> request){
+       getRequestQueue().add(request);
+   }
 
 
 }
